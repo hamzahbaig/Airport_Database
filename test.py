@@ -169,8 +169,9 @@ def receptionistHandler(option):
 		cancelFlight()
 
 def updateFlight():
+	print("\n\nUpdating Flight Record...")
 	while(1):
-		print("Press 1 to UPDATE flight id ")
+		print("\n\nPress 1 to UPDATE flight id ")
 		print("Press 2 to UPDATE Departure airport")
 		print("Press 3 to UPDATE Arrival airport")
 		print("Press 4 to UPDATE Departure time")
@@ -216,15 +217,32 @@ def updateFlight():
 		val = (newval,flightid);
 		mycursor.execute(sql,val)
 		mydb.commit()
+
+def viewFlights():
+	print("\n\nViewing Flights...")
+	airport = input("Enter airport: ")
+
+	sql = "SELECT * from Flight where arrivalAirport = %s OR departureAirport = %s"
+	val = (airport,airport)
+
+	mycursor.execute(sql,val)
+	result = mycursor.fetchall()
+	print("\n ALL Flights...")
+	for x in result:
+		print(x)
+
 def adminHandler(option):
 	if option == "1":
 		addNewFlight()
 	elif option =="2":
 		updateFlight()
+	elif option == "3":
+		viewFlights()
 
 def adminMenu():
 	print("\n\nPress 1 add new flight.")
 	print("Press 2 to Update details of an exsisting flight.")
+	print("Press 3 to view all flights landing and taking off.")
 	option = input("\nPlease Enter the number")
 	adminHandler(option)
 
