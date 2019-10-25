@@ -85,26 +85,68 @@ def findCheapestFlights():
 
 		print(myresult)
 
- # fixing this function, other than this function its working perfect
 def generateTicket():
 	print("\n\n Generating Ticket for the pasenger")
 
-	cnic = input("Enter CNIC number: ")
-	flightID = input("Enter Flight ID: ")
+	
+	cnic = input("Enter your CNIC number: ")
+	mycursor.execute("SELECT * FROM Flight")
+	myresult = mycursor.fetchall()
+	for x in myresult:
+		print(x)
 
-	mycursor.execute("SELECT * FROM Passengers WHERE CNIC = " + str(cnic))
-	if(not mycursor.fetchone()):
-		print("No such CNIC entry")
-		return
-	print("ALII")
-	mycursor.execute("SELECT * FROM Flight WHERE flightID = 'PK305' ")
-	# val = (flightID)
-	if(not mycursor.fetchone()):
-		print("No Such flight")
-		return
-	print("HAMZAHHH")
-	sql = "INSERT INTO Ticket(CNICPassenger ,fID) VALUES (%S,%S)"
-	val = (cnic,flightID)
+	flightId = input("Choose flight Id from above mentioned Ids: ")
+
+	sql = 'INSERT INTO Ticket(CNICPassenger ,fId) VALUES(%s,%s)'
+	val = (cnic,flightId)
+	mycursor.execute(sql,val)
+	mydb.commit()
+	sql = 'INSERT INTO FlighHistory(CNICPassenger ,fId) VALUES(%s,%s)'
+	val = (cnic,flightId)
+	mycursor.execute(sql,val)
+	mydb.commit()
+	
+	
+def cancelFlight():
+	print("\n\nCancelling Flight...")
+
+	cnic = input("Enter CNIC number: ")
+	mycursor.execute("SELECT * FROM Flight")
+	myresult = mycursor.fetchall()
+	for x in myresult:
+		print(x)
+
+	flightId = input("Choose flight Id from above mentioned Ids: ")
+
+	sql = "DELETE FROM Ticket WHERE fId = %s AND CNICPassenger = %s "
+	val = (flightId,cnic)
+
+	mycursor.execute(sql,val)
+	mydb.commit()
+
+def printHistory():
+	print("\n\n  Printing Flight History...")
+
+	cnic = input("Enter CNIC number: ")
+	sql = "SELECT * from FlighHistory WHERE CNICPassenger = " + cnic
+	val = (cnic)
+	mycursor.execute(sql,val)
+	result = mycursor.fetchall()
+
+	for x in result:
+		print(x)
+
+def addNewFlight():
+	flightID = input("Enter flight ID: ")
+	depAir = input("Enter Departure Airport: ")
+	arrAir = input("Enter Arrival Airport: ")
+	depTime = input("Enter Departure Time: ")
+	arrTime = input("Enter Arrival Time: ")
+	airp = input("Enter airplane name: ")
+	f = input("Enter fare of plane: ")
+
+	sql = "INSERT INTO Flight (flightID,departureAirport,arrivalAirport,departureTime,arrivalTime,airplane,fare) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+	val = (flightID,depAir,arrAir,depTime,arrTime,airp,int(f))
 
 	mycursor.execute(sql,val)
 	mydb.commit()
@@ -121,8 +163,70 @@ def receptionistHandler(option):
 		generateTicket()
 	elif option == "5":
 		findCheapestFlights()
+	elif option == "6":
+		printHistory()
+	elif option == "7":
+		cancelFlight()
 
-	
+def updateFlight():
+	while(1):
+		print("Press 1 to UPDATE flight id ")
+		print("Press 2 to UPDATE Departure airport")
+		print("Press 3 to UPDATE Arrival airport")
+		print("Press 4 to UPDATE Departure time")
+		print("Press 5 to UPDATE Arrival time")
+		print("Press 6 to UPDATE Airport ")
+		print("Press 7 to UPDATE fare")
+		print("Press 8 to exit update ")
+		option = int(input(""))
+		if(option == 8):
+			return
+		elif(option == 1):
+			coloumn = "flightID"
+			flightid = input("enter flight_id row you want to change ")
+			newval = input("enter the newvalue ")
+		elif(option == 2):
+			coloumn = "departureAirport"
+			flightid = input("enter flight_id row you want to change ")
+			newval = input("enter the newvalue ")
+		elif(option == 3):
+			coloumn = "arrivalAirport"
+			flightid = input("enter flight_id row you want to change ")
+			newval = input("enter the newvalue ")
+		elif(option == 4):
+			coloumn = "departureTime"
+			flightid = input("enter flight_id row you want to change ")
+			newval = input("enter the newvalue ")
+		elif(option == 5):
+			coloumn = "arrivalTime"
+			flightid = input("enter flight_id row you want to change ")
+			newval = input("enter the newvalue ")
+		elif(option == 6):
+			coloumn = "airplane"
+			flightid = input("enter flight_id row you want to change ")
+			newval = input("enter the newvalue ")
+		elif(option == 7):
+			coloumn = "fare"
+			flightid = input("enter flight_id row you want to change ")
+			newval = int(input("enter the newvalue "))
+		elif option == "8":
+			return
+
+		sql = 'UPDATE Flight SET '+coloumn+' = %s WHERE flightID = %s'
+		val = (newval,flightid);
+		mycursor.execute(sql,val)
+		mydb.commit()
+def adminHandler(option):
+	if option == "1":
+		addNewFlight()
+	elif option =="2":
+		updateFlight()
+
+def adminMenu():
+	print("\n\nPress 1 add new flight.")
+	print("Press 2 to Update details of an exsisting flight.")
+	option = input("\nPlease Enter the number")
+	adminHandler(option)
 
 
 def receptionistMenu():
@@ -149,6 +253,7 @@ def welcomeScreen():
 			password = input("Enter Password: ")
 			if(username == 'admin' and password == 'admin'):
 				print("\nAccess Granted to Admin")
+				adminMenu()
 			else:
 				print("\nWrong creditionals for Admin Login, Please Try again")
 

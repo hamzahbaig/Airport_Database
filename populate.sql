@@ -10,8 +10,8 @@ insert into Flight values("PK305", "KHI", "LHR", "08:00", "12:00", "ANJ-412", 13
 insert into Passengers values("36302", "minhal1", "0312", "null", "pak1");
 insert into Passengers values("36303", "minhal2", "0313", "null", "pak2");
 insert into Passengers values("36304", "minhal3", "0314", "null", "pak3");
-insert into Ticket(CNICPassenger ,fID) values("36304","PK303");
-insert into Ticket(CNICPassenger ,fID) values("36302","PK301");
-insert into Ticket(CNICPassenger ,fID) values("36303","PK302");
+insert into Ticket(CNICPassenger ,fId) values("36304","PK303");
+insert into Ticket(CNICPassenger ,fId) values("36302","PK301");
+insert into Ticket(CNICPassenger ,fId) values("36303","PK302");
 
 commit;

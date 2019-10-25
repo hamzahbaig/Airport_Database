@@ -1,6 +1,8 @@
 drop table if exists Ticket CASCADE;
 drop table if exists Flight CASCADE;
 drop table if exists Passengers CASCADE;
+drop table if exists FlighHistory CASCADE;
+
 CREATE TABLE Flight(
 	flightID VARCHAR(5) PRIMARY KEY, 
 	departureAirport VARCHAR(3),
@@ -16,6 +18,11 @@ CREATE TABLE Passengers(
 	phone VARCHAR(15),
 	address VARCHAR(30),
 	nationality VARCHAR(30)
+);
+CREATE TABLE FlighHistory(
+	FlighHistoryID INT AUTO_INCREMENT PRIMARY KEY ,
+	CNICPassenger VARCHAR(13) , 
+	fId VARCHAR(5)
 );
 CREATE TABLE Ticket (
 	ticketID INT AUTO_INCREMENT PRIMARY KEY ,
