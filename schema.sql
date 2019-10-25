@@ -13,7 +13,7 @@ CREATE TABLE Flight(
 CREATE TABLE Passengers(
 	CNIC VARCHAR(13) PRIMARY KEY , 
 	name VARCHAR(30),
-	phone VARCHAR(11),
+	phone VARCHAR(15),
 	address VARCHAR(30),
 	nationality VARCHAR(30)
 );
